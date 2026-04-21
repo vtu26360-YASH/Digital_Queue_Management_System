@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Queue hfjhgfjh Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="app-body">
+    <div class="background-orb orb-one"></div>
+    <div class="background-orb orb-two"></div>
+
+    <div class="container py-4 py-lg-5">
+        <nav class="navbar smart-nav glass-panel mb-4 px-3 px-lg-4">
+            <a class="navbar-brand text-white fw-semibold" href="/">SmartQueue</a>
+            <div class="d-flex align-items-center gap-2">
+                <a class="btn btn-sm btn-outline-light rounded-pill px-3" href="/">User</a>
+                <a class="btn btn-sm btn-outline-light rounded-pill px-3" href="/admin">Admin</a>
+                <button id="logoutBtn" class="btn btn-sm btn-outline-warning rounded-pill px-3" type="button">Logout</button>
+                <button id="themeToggle" class="btn btn-sm btn-light rounded-pill px-3" type="button">Dark Mode</button>
+            </div>
+        </nav>
+
+        <section class="hero-panel glass-panel p-4 p-lg-5 mb-4">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <span class="hero-badge">Operations Console</span>
+                    <h1 class="display-5 text-white fw-bold mt-3 mb-3">Real-time admin control for a smart multi-service queue.</h1>
+                    <p class="text-white-50 mb-0">Monitor load, serve tokens by lane, pause operations, and use analytics to understand demand peaks and waiting trends.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="current-callout">
+                        <span>Current serving</span>
+                        <strong id="adminCurrentServingHero">No token served yet</strong>
+                        <small id="adminCurrentServingMeta">Waiting for next call</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="row g-4 mb-4">
+            <div class="col-6 col-xl-3">
+                <div class="glass-panel stat-card p-4 h-100">
+                    <span>Total Tokens Today</span>
+                    <strong id="statTotalTokens">0</strong>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="glass-panel stat-card p-4 h-100">
+                    <span>Served Today</span>
+                    <strong id="statServedTokens">0</strong>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="glass-panel stat-card p-4 h-100">
+                    <span>Waiting Now</span>
+                    <strong id="statWaitingTokens">0</strong>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="glass-panel stat-card p-4 h-100">
+                    <span>Average Wait</span>
+                    <strong id="statAverageWait">4 min</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-xl-4">
+                <section class="glass-panel p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <p class="section-kicker mb-2">Queue Control</p>
+                            <h2 class="h3 text-white mb-1">Serve & Route</h2>
+                            <p class="text-white-50 mb-0">Serve automatically or call the next token from a specific service lane.</p>
+                        </div>
+                    </div>
+
+                    <label class="form-label text-white-50" for="serviceRoute">Serving Lane</label>
+                    <select id="serviceRoute" class="form-select custom-input mb-3">
+                        <option value="AUTO">Smart Route</option>
+                        <option value="PAYMENT">Payment</option>
+                        <option value="ENQUIRY">Enquiry</option>
+                        <option value="SUPPORT">Support</option>
+                    </select>
+
+                    <div class="d-grid gap-3">
+                        <button id="serveNextBtn" class="btn btn-primary smart-btn btn-lg" type="button">Serve Next Token</button>
+                        <button id="togglePauseBtn" class="btn btn-outline-light rounded-4 py-3" type="button">Pause Queue</button>
+                        <button id="resetQueueBtn" class="btn btn-outline-danger rounded-4 py-3" type="button">Reset Queue</button>
+                    </div>
+
+                    <div id="adminMessage" class="alert smart-alert mt-4 d-none"></div>
+
+                    <div class="system-state mt-4">
+                        <span>System State</span>
+                        <strong id="queueStateLabel">Live</strong>
+                        <small id="peakTimeLabel">Peak time: No peak yet</small>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-xl-8">
+                <section class="glass-panel p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <p class="section-kicker mb-2">Analytics</p>
+                            <h2 class="h3 text-white mb-1">Queue Insights Dashboard</h2>
+                            <p class="text-white-50 mb-0">Visualize demand peaks, served volume, and live service lane pressure.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-lg-7">
+                            <div class="chart-shell">
+                                <div class="chart-title-row">
+                                    <h3 class="h6 text-white mb-0">Queue Activity Trend</h3>
+                                    <span class="board-pill">Last 8 hours</span>
+                                </div>
+                                <canvas id="trendChart" height="220"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="chart-shell h-100">
+                                <div class="chart-title-row">
+                                    <h3 class="h6 text-white mb-0">Service Queue Load</h3>
+                                </div>
+                                <canvas id="serviceChart" height="220"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+            <div class="col-xl-7">
+                <section class="glass-panel p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <p class="section-kicker mb-2">Live Board</p>
+                            <h2 class="h3 text-white mb-1">Waiting Queue Table</h2>
+                        </div>
+                        <span class="board-pill">Real-time monitoring</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table smart-table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Token</th>
+                                    <th>Name</th>
+                                    <th>Service</th>
+                                    <th>Priority</th>
+                                    <th>Position</th>
+                                    <th>ETA</th>
+                                </tr>
+                            </thead>
+                            <tbody id="queueTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="queueEmptyState" class="empty-board mt-3 d-none">No tokens are waiting right now.</div>
+                </section>
+            </div>
+
+            <div class="col-xl-5">
+                <section class="glass-panel p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <p class="section-kicker mb-2">Service Lanes</p>
+                            <h2 class="h3 text-white mb-0">Load by Queue</h2>
+                        </div>
+                    </div>
+                    <div id="adminServiceLaneGrid" class="row g-3"></div>
+                </section>
+
+                <section class="glass-panel p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <p class="section-kicker mb-2">Recent Activity</p>
+                            <h2 class="h3 text-white mb-0">Latest Tokens</h2>
+                        </div>
+                    </div>
+                    <div id="recentActivityList" class="activity-list"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationToast" class="smart-toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="/admin.js"></script>
+</body>
+</html>
