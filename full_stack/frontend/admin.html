@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div>
+                <p class="eyebrow">Queue Administration</p>
+                <h1>Admin Dashboard</h1>
+                <p class="subtitle">Serve the next token, monitor the queue, and reset the system when needed.</p>
+            </div>
+            <nav class="top-nav">
+                <a class="nav-link" href="index.html">User View</a>
+                <a class="nav-link active" href="admin.html">Admin View</a>
+            </nav>
+        </header>
+
+        <main class="grid-layout">
+            <section class="card accent-card">
+                <h2>Admin Actions</h2>
+                <p class="muted">Use these controls to manage the queue.</p>
+
+                <div class="button-row">
+                    <button id="serveNextBtn" type="button">Serve Next</button>
+                    <button id="resetQueueBtn" type="button" class="secondary-btn">Reset Queue</button>
+                </div>
+
+                <div id="adminMessage" class="message hidden"></div>
+
+                <div class="result-card">
+                    <span class="result-label">Currently Serving</span>
+                    <strong id="adminCurrentServing">No token served yet</strong>
+                    <span id="servedName" class="muted">Waiting for next action</span>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Waiting Queue</h2>
+                <div class="status-strip">
+                    <div>
+                        <span class="mini-label">Waiting Count</span>
+                        <strong id="adminWaitingCount">0</strong>
+                    </div>
+                    <div>
+                        <span class="mini-label">Next Token</span>
+                        <strong id="adminNextToken">-</strong>
+                    </div>
+                </div>
+
+                <ul id="adminQueueList" class="queue-list"></ul>
+                <p id="adminQueueEmptyState" class="empty-state">No tokens in queue</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
